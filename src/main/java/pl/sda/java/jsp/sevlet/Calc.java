@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Calc extends HttpServlet {
+
+
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
 
-        request.setAttribute("output", 44);
+        request.setAttribute("output", request.getParameter("arg"));
         request.getRequestDispatcher("kalkulator.jsp").forward(request,response);
     }
 }
