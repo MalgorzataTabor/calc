@@ -9,6 +9,9 @@ public class Calculator {
     public String display() {
         return input;
     }
+    public String getDisplay(){
+        return display();
+    }
 
     public void input(String digit) {
         input += digit;
