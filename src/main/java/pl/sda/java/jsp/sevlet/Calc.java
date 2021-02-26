@@ -9,38 +9,69 @@ import java.io.PrintWriter;
 
 public class Calc extends HttpServlet {
 
-    private String input = "";
+   /* private String input = "";
     private String input2 = "";
+    private String operator;*/
 
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-
+        String input = (String) request.getSession().getAttribute("input");
+        if (input == null) {
+            input = "";
+        }
         if (request.getParameter("arg") != null) {
             input = input + request.getParameter("arg");
+            request.getSession().setAttribute("input", input);
         }
 
-        request.setAttribute("output", input);
+        // request.setAttribute("output", input);
         request.getRequestDispatcher("kalkulator.jsp").forward(request, response);
     }
 
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if("CE".equals(req.getParameter("ce"))){
-            input ="";
-        }
-        if( "+".equals(req.getParameter("operator"))){
 
-           input2= input;
-           input="";
+        String input = (String) req.getSession().getAttribute("input");
+        ;
+        String input2 = (String) req.getSession().getAttribute("input2");
+        String operator = (String) req.getSession().getAttribute("operator");
 
+        if ("CE".equals(req.getParameter("ce"))) {
+            input = "";
+        }
+        if ("+".equals(req.getParameter("operator"))) {
+            input2 = input;
+            input = "";
+            operator = "+";
+            req.getSession().setAttribute("input2", input2);
+            req.getSession().setAttribute("operator", operator);
+        }
+        if ("-".equals(req.getParameter("operator"))) {
+            input2 = input;
+            input = "";
+            operator = "-";
+            req.getSession().setAttribute("input2", input2);
+            req.getSession().setAttribute("operator", operator);
         }
 
-        if( "=".equals(req.getParameter("evaluate"))){
-            input = String.valueOf(Integer.valueOf(input) + Integer.valueOf(input2));
-            
+        if ("=".equals(req.getParameter("evaluate"))) {
+            switch (operator) {
+
+                case "+":
+                    input = String.valueOf(Integer.valueOf(input) + Integer.valueOf(input2));
+                    break;
+                case "-":
+                    input = String.valueOf(Integer.valueOf(input2) - Integer.valueOf(input));
+                    break;
+                default:
+                    throw new IllegalStateException("Invalid operator " + operator);
+
+
+            }
         }
+        req.getSession().setAttribute("input", input);
         req.setAttribute("output", input);
         req.getRequestDispatcher("kalkulator.jsp").forward(req, resp);
 
