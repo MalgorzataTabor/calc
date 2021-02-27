@@ -16,7 +16,7 @@ public class Calc extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-        if(request.getSession().getAttribute("email") != null){
+
 
             Calculator calculator = (Calculator) request.getSession().getAttribute("calculator");
             if (calculator == null) {
@@ -27,12 +27,10 @@ public class Calc extends HttpServlet {
                 calculator.input(request.getParameter("arg"));
             }
             request.getRequestDispatcher("kalkulator.jsp").forward(request, response);
-        } else{
 
-            response.sendRedirect("email");
         }
 
-    }
+
 
 
     @Override
